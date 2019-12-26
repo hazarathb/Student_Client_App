@@ -8,7 +8,6 @@ class StudentEdit extends Component {
   emptyItem = {
     firstName: '',
     lastName: ''
-    
   };
 
   constructor(props) {
@@ -22,8 +21,8 @@ class StudentEdit extends Component {
 
   async componentDidMount() {
     if (this.props.match.params.id !== 'new') {
-      const student = await (await fetch(`/students/${this.props.match.params.id}`)).json();
-      this.setState({item: student});
+      const student = await (await fetch(`http://localhost:8080/students/${this.props.match.params.id}`)).json();
+      this.setState({ item: student });
     }
   }
 
@@ -31,16 +30,16 @@ class StudentEdit extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    let item = {...this.state.item};
+    let item = { ...this.state.item };
     item[name] = value;
-    this.setState({item});
+    this.setState({ item });
   }
 
   async handleSubmit(event) {
     event.preventDefault();
-    const {item} = this.state;
+    const { item } = this.state;
 
-    await fetch('/students', {
+    await fetch('http://localhost:8080/students', {
       method: (item.id) ? 'PUT' : 'POST',
       headers: {
         'Accept': 'application/json',
@@ -52,27 +51,24 @@ class StudentEdit extends Component {
   }
 
   render() {
-    const {item} = this.state;
+    const { item } = this.state;
     const title = <h2>{item.id ? 'Edit Student' : 'Add Student'}</h2>;
 
     return <div>
-      <AppNavbar/>
+      <AppNavbar />
       <Container>
         {title}
         <Form onSubmit={this.handleSubmit}>
           <FormGroup>
             <Label for="firstName">First Name</Label>
             <Input type="text" name="firstName" id="firstName" value={item.firstName || ''}
-                   onChange={this.handleChange} autoComplete="firstName"/>
+              onChange={this.handleChange} autoComplete="firstName" />
           </FormGroup>
-		  
-		   <FormGroup>
+          <FormGroup>
             <Label for="lastName">Last Name</Label>
             <Input type="text" name="lastName" id="lastName" value={item.lastName || ''}
-                   onChange={this.handleChange} autoComplete="lastName"/>
+              onChange={this.handleChange} autoComplete="lastName" />
           </FormGroup>
-        
-         
           <FormGroup>
             <Button color="primary" type="submit">Save</Button>{' '}
             <Button color="secondary" tag={Link} to="/">Cancel</Button>
